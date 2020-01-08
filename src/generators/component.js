@@ -1,12 +1,14 @@
 "use strict";
 
-const { componentExistsIn } = require("../utils/exists");
-const { projectPath } = require("../utils");
+const loadUtils = require("../utils");
 
 /**
  * Generate a React component in a module.
  */
-module.exports = ({ basePath, componentPaths, componentNames }) => {
+module.exports = config => {
+  const { projectPath, componentExistsIn } = loadUtils(config);
+  const { basePath, componentPaths, componentNames } = config;
+
   const componentPath = path =>
     projectPath(
       `${basePath}/${componentPaths.component}/${componentNames.component}/${path}`

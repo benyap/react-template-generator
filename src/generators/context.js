@@ -1,12 +1,14 @@
 "use strict";
 
-const { contextExistsIn } = require("../utils/exists");
-const { projectPath } = require("../utils");
+const loadUtils = require("../utils");
 
 /**
  * Generate a React context in a module.
  */
 module.exports = ({ basePath, componentPaths, componentNames }) => {
+  const { projectPath, contextExistsIn } = loadUtils(config);
+  const { basePath, componentPaths, componentNames } = config;
+
   const contextPath = path =>
     projectPath(
       `${basePath}/${componentPaths.context}/${componentNames.context}/${path}`

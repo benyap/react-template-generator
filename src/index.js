@@ -36,6 +36,8 @@ Generator.launch({}, env => {
 
   // Default configuration
   let config = {
+    // rootPath: "../../../",
+    rootPath: "./",
     basePath: "app/src/modules",
     componentPaths: {
       component: "{{ camelCase module }}/components",

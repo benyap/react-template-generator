@@ -1,12 +1,14 @@
 "use strict";
 
-const { pageExistsIn } = require("../utils/exists");
-const { projectPath } = require("../utils");
+const loadUtils = require("../utils");
 
 /**
  * Generate a page in a module.
  */
 module.exports = ({ basePath, componentPaths, componentNames }) => {
+  const { projectPath, pageExistsIn } = loadUtils(config);
+  const { basePath, componentPaths, componentNames } = config;
+
   const pagePath = path =>
     projectPath(
       `${basePath}/${componentPaths.page}/${componentNames.page}/${path}`
