@@ -37,7 +37,7 @@ Generator.launch({}, env => {
 
   // Default configuration
   const config = {
-    rootPath: "./",
+    root: env.cwd,
     basePath: "src/modules",
     componentPaths: {
       component: "{{ camelCase module }}/components",
@@ -57,7 +57,7 @@ Generator.launch({}, env => {
       const customConfig = JSON.parse(fs.readFileSync(configPath).toString());
 
       // Override default config
-      if (customConfig.rootPath) config.rootPath = customConfig.rootPath;
+      if (customConfig.root) config.root = customConfig.root;
       if (customConfig.basePath) config.basePath = customConfig.basePath;
       if (customConfig.templateDir)
         config.templateDir = customConfig.templateDir;

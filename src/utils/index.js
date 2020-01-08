@@ -44,13 +44,13 @@ module.exports = config => {
    * Create an abosolute path to a directory in the project from the root directory.
    * @param {string} path
    */
-  const projectPath = source => path.join(__dirname, `${rootPath}${source}`);
+  const projectPath = source => path.join(root, source);
 
   /**
    * Create an absolute path to a template file.
    * @param {string} path
    */
-  const templatePath = source => path.join(__dirname, `templates`, source);
+  const templatePath = source => path.join(__dirname, `../templates`, source);
 
   /**
    * Get a list of modules in the project (in app/modules)
