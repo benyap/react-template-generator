@@ -8,16 +8,34 @@ const path = require("path");
 const isDirectory = source => fs.lstatSync(source).isDirectory();
 
 /**
- * Get a list of directories at the specified source path.
+ * Check whether a source path is a file.
  * @param {string} source
  */
-const getDirectories = source => {
+const isFile = source => fs.lstatSync(source).isFile();
+
+/**
+ * Read the object paths in the given directory.
+ * @param {string} source
+ */
+const readDirectory = source => {
   if (!fs.existsSync(source)) return [];
   return fs
     .readdirSync(source)
     .map(name => path.join(source, name))
-    .filter(isDirectory);
+    .filter(isFile);
 };
+
+/**
+ * Get a list of directories at the specified source path.
+ * @param {string} source
+ */
+const getDirectories = source => readDirectory(source).filter(isDirectory);
+
+/**
+ * Get a list of files at the speciifed source path.
+ * @param {string} source
+ */
+const getDirectories = source => readDirectory(source).filter(isFile);
 
 /**
  * Create an abosolute path to a directory in the project from the root directory.
@@ -62,7 +80,9 @@ const pathTail = p => {
 
 module.exports = {
   isDirectory,
+  isFile,
   getDirectories,
+  getFiles,
   projectPath,
   getModules,
   getModulePart,

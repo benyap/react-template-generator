@@ -9,6 +9,11 @@ const nodePlop = require("node-plop");
 const args = process.argv.slice(2);
 const argv = require("minimist")(args);
 
+// Import generators
+const createComponentGenerator = require("./generators/component");
+const createContextGenerator = require("./generators/context");
+const createPageGenerator = require("./generators/page");
+
 const Generator = new Liftoff({
   name: "react-typescript-generators",
   configName: "generators-config",
@@ -25,12 +30,24 @@ const GEN = {
 };
 
 Generator.launch({}, env => {
-  const { configPath, modulePath } = env;
+  const { configPath } = env;
 
   console.log(env);
 
   // Default configuration
-  let config = {};
+  let config = {
+    basePath: "app/src/modules",
+    componentPaths: {
+      component: "{{ camelCase module }}/components",
+      context: "{{ camelCase module }}/contexts",
+      page: "{{ camelCase module }}/pages"
+    },
+    componentNames: {
+      component: "{{ properCase name }}",
+      context: "{{ properCase name }}Context",
+      page: "{{ properCase name }}Page"
+    }
+  };
 
   // Overwrite configuration if we can read a user provided config file
   if (configPath) {
@@ -48,9 +65,13 @@ Generator.launch({}, env => {
 
   const generatorName = argv._[0];
 
-  const plop = nodePlop(
-    modulePath.replace("index.js", "src/generators/index.js")
-  );
+  const plop = nodePlop();
+
+  // Load generators
+  plop.setGenerator("component", createComponentGenerator(config));
+  plop.setGenerator("context", createContextGenerator(config));
+  plop.setGenerator("page", createPageGenerator(config));
+
   const generators = plop.getGeneratorList();
   const generatorNames = generators.map(v => v.name);
 
