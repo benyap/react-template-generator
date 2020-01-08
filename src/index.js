@@ -27,6 +27,8 @@ const GEN = {
 Generator.launch({}, env => {
   const { configPath, modulePath } = env;
 
+  console.log(env);
+
   // Default configuration
   let config = {};
 
