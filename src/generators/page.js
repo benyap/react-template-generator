@@ -5,7 +5,7 @@ const loadUtils = require("../utils");
 /**
  * Generate a page in a module.
  */
-module.exports = ({ basePath, componentPaths, componentNames }) => {
+module.exports = config => {
   const { projectPath, pageExistsIn } = loadUtils(config);
   const { basePath, componentPaths, componentNames } = config;
 
