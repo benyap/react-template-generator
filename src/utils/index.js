@@ -50,7 +50,7 @@ module.exports = config => {
    * Create an absolute path to a template file.
    * @param {string} path
    */
-  const templatePath = path => path.join(__dirname, `templates`, path);
+  const templatePath = source => path.join(__dirname, `templates`, source);
 
   /**
    * Get a list of modules in the project (in app/modules)
