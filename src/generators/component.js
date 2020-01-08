@@ -2,10 +2,12 @@
 
 const loadUtils = require("../utils");
 
+const loadComponentTemplates = config => {};
+
 /**
- * Generate a React component in a module.
+ * Create the config for generating a React component in a module.
  */
-module.exports = config => {
+const generateComponentConfig = config => {
   const { projectPath, componentExistsIn } = loadUtils(config);
   const { basePath, componentPaths, componentNames } = config;
 
@@ -86,3 +88,5 @@ module.exports = config => {
     }
   };
 };
+
+module.exports = { generateComponentConfig };

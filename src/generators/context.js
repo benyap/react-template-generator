@@ -2,10 +2,12 @@
 
 const loadUtils = require("../utils");
 
+const loadContextTemplates = config => {};
+
 /**
- * Generate a React context in a module.
+ * Create the config for generating a React context in a module.
  */
-module.exports = config => {
+const generateContextConfig = config => {
   const { projectPath, contextExistsIn } = loadUtils(config);
   const { basePath, componentPaths, componentNames } = config;
 
@@ -84,3 +86,5 @@ module.exports = config => {
     }
   };
 };
+
+module.exports = { generateContextConfig };

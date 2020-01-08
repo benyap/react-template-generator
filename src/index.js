@@ -5,17 +5,16 @@ const Liftoff = require("liftoff");
 const v8flags = require("v8flags");
 const chalk = require("chalk");
 const nodePlop = require("node-plop");
-const ncp = require("ncp").ncp;
 
 const args = process.argv.slice(2);
 const argv = require("minimist")(args);
 
-const loadUtils = require("./utils");
-
 // Import generators
-const createComponentGenerator = require("./generators/component");
-const createContextGenerator = require("./generators/context");
-const createPageGenerator = require("./generators/page");
+const { generateComponentConfig } = require("./generators/component");
+const { generateContextConfig } = require("./generators/context");
+const { generatePageConfig } = require("./generators/page");
+
+// Import templates
 
 const Generator = new Liftoff({
   name: "react-typescript-generators",
@@ -39,7 +38,6 @@ Generator.launch({}, env => {
 
   // Default configuration
   let config = {
-    // rootPath: "../../../",
     rootPath: "./",
     basePath: "app/src/modules",
     templateDir: "./templates",
@@ -74,9 +72,9 @@ Generator.launch({}, env => {
   const plop = nodePlop();
 
   // Load generators
-  plop.setGenerator("component", createComponentGenerator(config));
-  plop.setGenerator("context", createContextGenerator(config));
-  plop.setGenerator("page", createPageGenerator(config));
+  plop.setGenerator("component", generateComponentConfig(config));
+  plop.setGenerator("context", generateContextConfig(config));
+  plop.setGenerator("page", generatePageConfig(config));
 
   const generators = plop.getGeneratorList();
   const generatorNames = generators.map(v => v.name);
@@ -88,14 +86,14 @@ Generator.launch({}, env => {
   } else if (!generatorName && generators.length === 1) {
     if (generators.length === 1) {
       // Only one generator available, so run that one
-      runGenerator(config, plop, generatorNames[0]);
+      runGenerator(plop, generatorNames[0], config);
     } else {
       console.error(GEN.error + `No generator name given.`);
       process.exit(1);
     }
   } else if (generatorNames.includes(generatorName)) {
     // Run the selected generator
-    runGenerator(config, plop, generatorName);
+    runGenerator(plop, generatorName, config);
   } else {
     // The requested generator doesn't exist
     console.error(
@@ -108,22 +106,8 @@ Generator.launch({}, env => {
 /**
  * Select the generator by name and run it.
  */
-const runGenerator = (config, plop, name) => {
-  // Ensure templates are copied over.
-  const { isDirectory } = loadUtils(config);
-  if (!isDirectory(config.templateDir)) {
-    ncp("./templates", config.templateDir, err => {
-      if (err) {
-        console.error(err);
-        process.exit(1);
-      }
-      // Run the generator.
-      const generator = plop.getGenerator(name);
-      generator.runPrompts();
-    });
-  } else {
-    // Run the generator.
-    const generator = plop.getGenerator(name);
-    generator.runPrompts();
-  }
+const runGenerator = (plop, name, config) => {
+  // Run the generator.
+  const generator = plop.getGenerator(name);
+  generator.runPrompts();
 };

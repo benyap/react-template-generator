@@ -2,10 +2,12 @@
 
 const loadUtils = require("../utils");
 
+const loadPageTemplates = config => {};
+
 /**
- * Generate a page in a module.
+ * Create the config for generating a page in a module.
  */
-module.exports = config => {
+const generatePageConfig = config => {
   const { projectPath, pageExistsIn } = loadUtils(config);
   const { basePath, componentPaths, componentNames } = config;
 
@@ -77,3 +79,5 @@ module.exports = config => {
     }
   };
 };
+
+module.exports = { generatePageConfig };
