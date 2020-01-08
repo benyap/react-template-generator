@@ -5,6 +5,7 @@ const Liftoff = require("liftoff");
 const v8flags = require("v8flags");
 const chalk = require("chalk");
 const nodePlop = require("node-plop");
+const ora = require("ora");
 
 const args = process.argv.slice(2);
 const argv = require("minimist")(args);
@@ -107,7 +108,69 @@ Generator.launch({}, env => {
  * Select the generator by name and run it.
  */
 const runGenerator = (plop, name, config) => {
-  // Run the generator.
   const generator = plop.getGenerator(name);
-  generator.runPrompts();
+
+  // See https://github.com/plopjs/plop/blob/master/src/plop.js
+  generator
+    .runPrompts()
+    .then(answers => {
+      const noMap = argv["show-type-names"] || argv.t;
+      const progress = ora();
+
+      const typeDisplay = {
+        function: chalk.yellow("->"),
+        add: chalk.green("++"),
+        addMany: chalk.green("+!"),
+        modify: `${chalk.green("+")}${chalk.red("-")}`,
+        append: chalk.green("_+")
+      };
+
+      const typeMap = (name, noMap) => {
+        const dimType = chalk.dim(name);
+        return noMap ? dimType : typeDisplay[name] || dimType;
+      };
+
+      const onComment = msg => {
+        progress.info(msg);
+        progress.start();
+      };
+
+      const onSuccess = change => {
+        let line = "";
+        if (change.type) {
+          line += ` ${typeMap(change.type, noMap)}`;
+        }
+        if (change.path) {
+          line += ` ${change.path}`;
+        }
+        progress.succeed(line);
+        progress.start();
+      };
+
+      const onFailure = fail => {
+        let line = "";
+        if (fail.type) {
+          line += ` ${typeMap(fail.type, noMap)}`;
+        }
+        if (fail.path) {
+          line += ` ${fail.path}`;
+        }
+        const errMsg = fail.error || fail.message;
+        if (errMsg) {
+          line += ` ${errMsg}`;
+        }
+        progress.fail(line);
+        progress.start();
+      };
+
+      progress.start();
+
+      return generator
+        .runActions(answers, { onSuccess, onFailure, onComment })
+        .then(() => progress.stop());
+    })
+    .catch(function(err) {
+      console.error(chalk.red("[ERROR]"), err.message);
+      process.exit(1);
+    });
 };
