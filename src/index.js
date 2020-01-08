@@ -35,10 +35,8 @@ const GEN = {
 Generator.launch({}, env => {
   const { configPath } = env;
 
-  console.log(env);
-
   // Default configuration
-  let config = {
+  const config = {
     rootPath: "./",
     basePath: "app/src/modules",
     templateDir: "./templates",
@@ -57,7 +55,31 @@ Generator.launch({}, env => {
   // Overwrite configuration if we can read a user provided config file
   if (configPath) {
     try {
-      config = JSON.parse(fs.readFileSync(configPath).toString());
+      const customConfig = JSON.parse(fs.readFileSync(configPath).toString());
+
+      // Override default config
+      if (customConfig.rootPath) config.rootPath = customConfig.rootPath;
+      if (customConfig.basePath) config.basePath = customConfig.basePath;
+      if (customConfig.templateDir)
+        config.templateDir = customConfig.templateDir;
+
+      const replaceComponent = type => name => {
+        if (customConfig[type][name])
+          config[type][name] = customConfig[type][name];
+      };
+
+      if (customConfig.componentPaths) {
+        const replacePath = replaceComponent("componentPaths");
+        replacePath("component");
+        replacePath("context");
+        replacePath("page");
+      }
+      if (customConfig.componentNames) {
+        const replacePath = replaceComponent("componentNames");
+        replacePath("component");
+        replacePath("context");
+        replacePath("page");
+      }
     } catch (error) {
       console.error(GEN.error + `Failed to parse config file <${configPath}>.`);
       console.error(GEN.error + error);
@@ -67,6 +89,10 @@ Generator.launch({}, env => {
   } else {
     console.log(GEN.info + "Using default configuration.");
   }
+
+  // TODO: debugging only, remove me
+  console.log(env);
+  console.log(config);
 
   const generatorName = argv._[0];
 
