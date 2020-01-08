@@ -4,7 +4,6 @@ const pageGenerator = require("./page");
 
 /**
  * Create a plop generator.
- * @param {*} plop
  */
 module.exports = plop => {
   plop.setGenerator("component", componentGenerator);
