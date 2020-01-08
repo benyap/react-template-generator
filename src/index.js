@@ -25,7 +25,7 @@ const GEN = {
 };
 
 Generator.launch({}, env => {
-  const { configPath } = env;
+  const { configPath, modulePath } = env;
 
   // Default configuration
   let config = {};
@@ -46,7 +46,9 @@ Generator.launch({}, env => {
 
   const generatorName = argv._[0];
 
-  const plop = nodePlop("./src/generators/index.js");
+  const plop = nodePlop(
+    modulePath.replace("index.js", "src/generators/index.js")
+  );
   const generators = plop.getGeneratorList();
   const generatorNames = generators.map(v => v.name);
 
