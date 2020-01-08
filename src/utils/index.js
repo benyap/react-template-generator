@@ -32,10 +32,10 @@ const readDirectory = source => {
 const getDirectories = source => readDirectory(source).filter(isDirectory);
 
 /**
- * Get a list of files at the speciifed source path.
+ * Get a list of files at the specified source path.
  * @param {string} source
  */
-const getDirectories = source => readDirectory(source).filter(isFile);
+const getFiles = source => readDirectory(source).filter(isFile);
 
 /**
  * Create an abosolute path to a directory in the project from the root directory.
