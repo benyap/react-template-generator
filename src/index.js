@@ -5,9 +5,12 @@ const Liftoff = require("liftoff");
 const v8flags = require("v8flags");
 const chalk = require("chalk");
 const nodePlop = require("node-plop");
+const ncp = require("ncp").ncp;
 
 const args = process.argv.slice(2);
 const argv = require("minimist")(args);
+
+const loadUtils = require("./utils");
 
 // Import generators
 const createComponentGenerator = require("./generators/component");
@@ -39,6 +42,7 @@ Generator.launch({}, env => {
     // rootPath: "../../../",
     rootPath: "./",
     basePath: "app/src/modules",
+    templateDir: "./templates",
     componentPaths: {
       component: "{{ camelCase module }}/components",
       context: "{{ camelCase module }}/contexts",
@@ -84,14 +88,14 @@ Generator.launch({}, env => {
   } else if (!generatorName && generators.length === 1) {
     if (generators.length === 1) {
       // Only one generator available, so run that one
-      runGenerator(plop, generatorNames[0]);
+      runGenerator(config, plop, generatorNames[0]);
     } else {
       console.error(GEN.error + `No generator name given.`);
       process.exit(1);
     }
   } else if (generatorNames.includes(generatorName)) {
     // Run the selected generator
-    runGenerator(plop, generatorName);
+    runGenerator(config, plop, generatorName);
   } else {
     // The requested generator doesn't exist
     console.error(
@@ -104,7 +108,22 @@ Generator.launch({}, env => {
 /**
  * Select the generator by name and run it.
  */
-const runGenerator = (plop, name) => {
-  const generator = plop.getGenerator(name);
-  generator.runPrompts();
+const runGenerator = (config, plop, name) => {
+  // Ensure templates are copied over.
+  const { isDirectory } = loadUtils(config);
+  if (!isDirectory(config.templateDir)) {
+    ncp("./templates", config.templateDir, err => {
+      if (err) {
+        console.error(err);
+        process.exit(1);
+      }
+      // Run the generator.
+      const generator = plop.getGenerator(name);
+      generator.runPrompts();
+    });
+  } else {
+    // Run the generator.
+    const generator = plop.getGenerator(name);
+    generator.runPrompts();
+  }
 };

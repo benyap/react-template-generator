@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 module.exports = config => {
-  const { basePath } = config;
+  const { basePath, rootPath } = config;
 
   /**
    * Check whether a source path is a directory.
