@@ -1,0 +1,15 @@
+{
+  "name": "react-typescript-generators",
+  "version": "0.0.0",
+  "description": "Template generators for React Typescript projects.",
+  "repository": "git@github.com:bwyap/react-typescript-generators.git",
+  "author": "Ben Yap <contact@benyap.com>",
+  "license": "MIT",
+  "bin": {
+    "generate": "plop --plopfile src/generators/index.js"
+  },
+  "dependencies": {
+    "plop": "2.5.3",
+    "shelljs": "0.8.3"
+  }
+}
