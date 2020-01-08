@@ -2,13 +2,11 @@
 
 const loadUtils = require("../utils");
 
-const loadComponentTemplates = config => {};
-
 /**
  * Create the config for generating a React component in a module.
  */
 const generateComponentConfig = config => {
-  const { projectPath, componentExistsIn } = loadUtils(config);
+  const { projectPath, templatePath, componentExistsIn } = loadUtils(config);
   const { basePath, componentPaths, componentNames } = config;
 
   const componentPath = path =>
@@ -58,28 +56,28 @@ const generateComponentConfig = config => {
         {
           type: "add",
           path: componentPath("index.ts"),
-          templateFile: "./component/index.ts.hbs",
+          templateFile: templatePath("component/index.ts.hbs"),
           abortOnFail: true
         },
         // Create the source file
         {
           type: "add",
           path: componentPath("{{ properCase name }}.tsx"),
-          templateFile: "./component/source.tsx.hbs",
+          templateFile: templatePath("component/source.tsx.hbs"),
           abortOnFail: true
         },
         // Create types file
         {
           type: "add",
           path: componentPath("types.d.ts"),
-          templateFile: "./component/types.d.ts.hbs",
+          templateFile: templatePath("component/types.d.ts.hbs"),
           abortOnFail: true
         },
         // Create the styles file
         {
           type: "add",
           path: componentPath("styles.ts"),
-          templateFile: "./component/styles.ts.hbs",
+          templateFile: templatePath("component/styles.ts.hbs"),
           abortOnFail: true
         }
       ];

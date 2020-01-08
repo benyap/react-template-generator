@@ -2,13 +2,11 @@
 
 const loadUtils = require("../utils");
 
-const loadPageTemplates = config => {};
-
 /**
  * Create the config for generating a page in a module.
  */
 const generatePageConfig = config => {
-  const { projectPath, pageExistsIn } = loadUtils(config);
+  const { projectPath, templatePath, pageExistsIn } = loadUtils(config);
   const { basePath, componentPaths, componentNames } = config;
 
   const pagePath = path =>
@@ -63,14 +61,14 @@ const generatePageConfig = config => {
         {
           type: "add",
           path: pagePath("index.ts"),
-          templateFile: "./page/index.ts.hbs",
+          templateFile: templatePath("page/index.ts.hbs"),
           abortOnFail: true
         },
         // Create the source file
         {
           type: "add",
           path: pagePath("{{ properCase name }}Page.tsx"),
-          templateFile: "./page/page.tsx.hbs",
+          templateFile: templatePath("page/page.tsx.hbs"),
           abortOnFail: true
         }
       ];

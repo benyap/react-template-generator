@@ -2,13 +2,11 @@
 
 const loadUtils = require("../utils");
 
-const loadContextTemplates = config => {};
-
 /**
  * Create the config for generating a React context in a module.
  */
 const generateContextConfig = config => {
-  const { projectPath, contextExistsIn } = loadUtils(config);
+  const { projectPath, templatePath, contextExistsIn } = loadUtils(config);
   const { basePath, componentPaths, componentNames } = config;
 
   const contextPath = path =>
@@ -63,21 +61,21 @@ const generateContextConfig = config => {
         {
           type: "add",
           path: contextPath("index.ts"),
-          templateFile: "./context/index.ts.hbs",
+          templateFile: templatePath("context/index.ts.hbs"),
           abortOnFail: true
         },
         // Create the provder file
         {
           type: "add",
           path: contextPath("{{ properCase name }}Provider.tsx"),
-          templateFile: "./context/provider.tsx.hbs",
+          templateFile: templatePath("context/provider.tsx.hbs"),
           abortOnFail: true
         },
         // Create types file
         {
           type: "add",
           path: contextPath("types.d.ts"),
-          templateFile: "./context/types.d.ts.hbs",
+          templateFile: templatePath("context/types.d.ts.hbs"),
           abortOnFail: true
         }
       ];
