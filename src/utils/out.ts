@@ -14,19 +14,40 @@ class Output {
   };
 
   public debug(message: any) {
-    console.log(Output.prefix + Output.level.debug + chalk.dim(message));
+    this.log(Output.level.debug, message);
   }
 
   public info(message: any) {
-    console.log(Output.prefix + Output.level.info + chalk.reset(message));
+    this.log(Output.level.info, message);
   }
 
   public warning(message: any) {
-    console.log(Output.prefix + Output.level.warning + chalk.reset(message));
+    this.log(Output.level.warning, message);
   }
 
   public error(message: any) {
-    console.log(Output.prefix + Output.level.error + chalk.red(message));
+    this.log(Output.level.error, message, console.error);
+  }
+
+  private log(
+    level: string,
+    message: any,
+    logMethod: (...any: any[]) => void = console.log
+  ) {
+    if (typeof message === "string") {
+      // If the message is a string, just log it
+      logMethod(Output.prefix + level + message);
+    } else {
+      // Otherwise, stringify the message and log each line.
+      const lines = JSON.stringify(message, null, 2).split("\n");
+      lines.forEach((line, index) => {
+        if (index === 0) logMethod(Output.prefix + level + line);
+        else {
+          const spacer = level.replace(/./g, "-");
+          logMethod(Output.prefix + spacer + line);
+        }
+      });
+    }
   }
 }
 
