@@ -21,6 +21,6 @@ const Generator = new Liftoff({
 });
 
 Generator.launch({}, env => {
-  out.info("Launching React Generator");
+  out.info("Launching React Typescript Generator");
   const config = getConfig(env);
 });

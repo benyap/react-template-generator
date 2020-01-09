@@ -4,7 +4,7 @@ import chalk from "chalk";
  * This class provides methods for logging messages to the output.
  */
 class Output {
-  private static prefix = chalk.reset("[ReactGen] ");
+  private static prefix = chalk.reset("[ReactTSGen] ");
 
   private static level = {
     debug: chalk.dim("[DEBUG] "),
