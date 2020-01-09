@@ -10,6 +10,7 @@ import nodePlop, { NodePlopAPI, AddActionConfig } from "node-plop";
 import inquirer from "inquirer";
 
 import { getConfig, out } from "./utils";
+import { stringify } from "querystring";
 
 const Generator = new Liftoff({
   name: "reactgen",
@@ -72,7 +73,7 @@ Generator.launch({}, env => {
           path,
           templateFile,
           force: false,
-          data: null,
+          data: {},
           abortOnFail
         })
       )
@@ -136,7 +137,11 @@ const runGenerator = (plop: NodePlopAPI, name: string) => {
         progress.start();
       };
 
-      const onSuccess = (change: any) => {
+      const onSuccess = (change: {
+        type: "function" | "add" | "addMany" | "modify" | "append";
+        path: string;
+        error: string;
+      }) => {
         let line = "";
         if (change.type) {
           line += ` ${typeDisplay[change.type]}`;
@@ -148,7 +153,12 @@ const runGenerator = (plop: NodePlopAPI, name: string) => {
         progress.start();
       };
 
-      const onFailure = (fail: any) => {
+      const onFailure = (fail: {
+        type: "function" | "add" | "addMany" | "modify" | "append";
+        path: string;
+        error: string;
+        message: string;
+      }) => {
         let line = "";
         if (fail.type) {
           line += ` ${typeDisplay[fail.type]}`;
