@@ -1,3 +1,3 @@
-# React Typescript Generators
+# React Template Generators
 
-Template generators for React Typescript projects.
+Template generators for React projects.

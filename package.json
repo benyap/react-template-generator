@@ -1,8 +1,8 @@
 {
-  "name": "react-typescript-generators",
+  "name": "react-template-generators",
   "version": "0.0.1-alpha.27",
-  "description": "Template generators for React Typescript projects.",
-  "repository": "git@github.com:bwyap/react-typescript-generators.git",
+  "description": "Template generators for React projects.",
+  "repository": "git@github.com:bwyap/react-template-generators.git",
   "author": "Ben Yap <contact@benyap.com>",
   "license": "MIT",
   "files": [
@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "prepublish": "npm run build"
+    "prepare": "npm run build"
   },
   "dependencies": {
     "chalk": "3.0.0",
