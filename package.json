@@ -1,0 +1,35 @@
+{
+  "name": "@benyap/react-template-generator",
+  "version": "0.0.1-alpha.36",
+  "description": "Template generator for React projects.",
+  "repository": "git@github.com:bwyap/react-template-generator.git",
+  "author": "Ben Yap <contact@benyap.com>",
+  "license": "MIT",
+  "files": [
+    "dist/*"
+  ],
+  "bin": {
+    "reactgen": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "rimraf dist && tsc",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "chalk": "3.0.0",
+    "liftoff": "3.1.0",
+    "minimist": "1.2.0",
+    "node-plop": "0.23.0",
+    "ora": "4.0.3",
+    "pjson": "1.0.9",
+    "v8flags": "3.1.3"
+  },
+  "devDependencies": {
+    "@types/handlebars": "4.1.0",
+    "@types/liftoff": "2.5.0",
+    "@types/minimist": "1.2.0",
+    "@types/v8flags": "3.1.1",
+    "rimraf": "3.0.0",
+    "typescript": "3.7.4"
+  }
+}
