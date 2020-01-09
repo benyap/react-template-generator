@@ -9,8 +9,15 @@ import Liftoff from "liftoff";
 import inquirer from "inquirer";
 import nodePlop, { NodePlopAPI, AddActionConfig } from "node-plop";
 
-import { getConfig, out, loadUtils } from "./utils";
+import { version } from "../package.json";
+import { getConfig } from "./config";
+import { loadUtils } from "./utils";
+import { out } from "./out";
 
+/**
+ * Create a new Liftoff instance to read and
+ * parse environment configuration.
+ */
 const Generator = new Liftoff({
   name: "reactgen",
   configName: "reactgenconfig",
@@ -20,8 +27,11 @@ const Generator = new Liftoff({
   v8flags
 });
 
+/**
+ * Launch the application.
+ */
 Generator.launch({}, env => {
-  out.info("Launching React Templates Generator");
+  out.info(`React Template Generator v${version}`);
 
   // Get configuration
   const config = getConfig(env);
@@ -29,49 +39,45 @@ Generator.launch({}, env => {
   // Load utils
   const utils = loadUtils(config);
 
-  // Create Plop
+  // Create Plop instance
   const plop = nodePlop("");
 
   // Load generators from config
-  Object.keys(config.parts).forEach(partName => {
+  Object.keys(config.parts).forEach(generator => {
     const { description, templates = [], variables = [] } = config.parts[
-      partName
+      generator
     ];
 
     // Show warnings for generators with no templates
     if (templates.length === 0) {
-      out.warning(`The generator "${partName}" produces no templates.`);
+      out.warning(`The generator "${generator}" produces no templates.`);
     }
 
-    plop.setGenerator(partName, {
+    // Register the generator with plop
+    plop.setGenerator(generator, {
       description,
+      // For each required variable, create a prompt
+      // in Plop to retrieve it from the user.
       prompts: variables.map<inquirer.Question>(
-        ({ name, message, defaultValue, regex, required, unique }) => {
+        ({ name, message, defaultValue, test, optional }) => {
           return {
             type: "input",
             name,
             default: defaultValue,
             message,
             validate: value => {
-              // Ensure a value is given if it is required
-              if (required) {
+              // Ensure a value is given if it is not optional
+              if (!optional) {
                 if (!/.+/.test(value)) {
                   return `A ${name} is required.`;
                 }
               }
 
-              // Check if name is unique
-              if (unique) {
-                const foundIn = utils.partExists(value);
-                if (foundIn) {
-                  return `A part with the name "${value}" already exists in the `;
-                }
-              }
-
-              // Check regex if required
-              if (regex) {
-                if (!new RegExp(regex.regex).test(value)) {
-                  return regex.message;
+              // Test the value with a regex if required
+              if (test) {
+                const result = new RegExp(test.regex).test(value);
+                if ((!test.inverted && result) || (test.inverted && !result)) {
+                  return test.error;
                 }
               }
 
@@ -80,14 +86,15 @@ Generator.launch({}, env => {
           };
         }
       ),
+      // For each template, create a file with an `add` action.
       actions: templates.map<AddActionConfig>(
-        ({ path, templateFile, abortOnFail }) => ({
+        ({ path, templateFile, continueOnFail }) => ({
           type: "add",
           path: utils.getPartPath(path),
           templateFile: utils.getTemplatePath(templateFile),
           force: false,
           data: {},
-          abortOnFail
+          abortOnFail: !continueOnFail
         })
       )
     });
@@ -98,8 +105,7 @@ Generator.launch({}, env => {
   const generatorName = argv._[0];
 
   // Get a list of generators
-  const generators = plop.getGeneratorList();
-  const generatorNames = generators.map(v => v.name);
+  const generators = plop.getGeneratorList().map(v => v.name);
 
   if (!generators.length) {
     // No generators available
@@ -108,14 +114,14 @@ Generator.launch({}, env => {
   } else if (!generatorName) {
     if (generators.length === 1) {
       // Only one generator available, so run that one
-      runGenerator(plop, generatorNames[0]);
+      runGenerator(plop, generators[0]);
     } else {
       out.error(
-        `No generator name given. Use one of these: [${generators.join(", ")}]`
+        `No generator name given. Use one of [${generators.join(", ")}]`
       );
       process.exit(1);
     }
-  } else if (generatorNames.includes(generatorName)) {
+  } else if (generators.includes(generatorName)) {
     // Run the selected generator
     runGenerator(plop, generatorName);
   } else {

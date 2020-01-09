@@ -1,8 +1,6 @@
 import fs from "fs";
 import Liftoff from "liftoff";
 
-import { out } from ".";
-
 /**
  * Schema for the configuration for the generator. This
  * can be overridden with a `reactgenconfig.js` file.
@@ -33,13 +31,6 @@ export interface ReactGenConfig {
 }
 
 export interface PartConfig {
-  /**
-   * The name of the part. You can use `handlebars` syntax
-   * to substitute for user input values requested through
-   * `variables`.
-   */
-  partName: string;
-
   /**
    * The description for the part being generated.
    */
@@ -77,23 +68,16 @@ export interface VariableConfig {
   defaultValue?: string;
 
   /**
-   * A value is required from the user if this is `true`.
-   *
-   * @default true
+   * Make this variable optional. By default, all variables
+   * are required.
    */
-  required?: boolean;
+  optional?: boolean;
 
   /**
-   * If this is `true`, the value will be checked
-   * that it is unique in the location that it is
-   * being created in.
+   * If a regular expression is provided, it will be used
+   * to check the value of the variable.
    */
-  unique?: true;
-
-  /**
-   * If a regular expression is provided, it will be
-   */
-  regex?: {
+  test?: {
     /**
      * The regular expression to use to check.
      */
@@ -102,7 +86,13 @@ export interface VariableConfig {
     /**
      * The error message if the regular expression fails.
      */
-    message: string;
+    error: string;
+
+    /**
+     * Invert the regex result. By default, an error is
+     * thrown if the regex contains a match.
+     */
+    inverted?: boolean;
   };
 }
 
@@ -118,10 +108,11 @@ export interface TemplateConfig {
   templateFile: string;
 
   /**
-   * Abort the rest of the generation process if this
-   * template fails to generate successfully.
+   * Continue the of the generation process even if this
+   * template fails to generate successfully. By default,
+   * the process will abort on failure.
    */
-  abortOnFail: boolean;
+  continueOnFail?: boolean;
 }
 
 /**
@@ -131,8 +122,6 @@ export interface TemplateConfig {
  * @param env
  */
 export const getConfig = (env: Liftoff.LiftoffEnv) => {
-  out.debug("Getting config...");
-
   let customConfig: Partial<ReactGenConfig> = {};
 
   const { configPath, cwd } = env;
@@ -149,8 +138,6 @@ export const getConfig = (env: Liftoff.LiftoffEnv) => {
     templatePath: customConfig.templatePath || "templates",
     parts: customConfig.parts || {}
   };
-
-  out.debug("Parsed config successfully.");
 
   // Return configuration
   return config;

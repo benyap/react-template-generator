@@ -19,22 +19,37 @@ class Output {
     this.prefix = chalk.reset(`[${name}]`) + " ";
   }
 
+  /**
+   * Log a debug message.
+   */
   public debug(message: any) {
     this.log(Output.level.debug, message);
   }
 
+  /**
+   * Log an info message.
+   */
   public info(message: any) {
     this.log(Output.level.info, message);
   }
 
+  /**
+   * Log a warning message.
+   */
   public warning(message: any) {
     this.log(Output.level.warning, message);
   }
 
+  /**
+   * Log an error message.
+   */
   public error(message: any) {
     this.log(Output.level.error, message, console.error);
   }
 
+  /**
+   * Log a message.
+   */
   private log(
     level: string,
     message: any,
