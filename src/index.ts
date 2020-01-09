@@ -6,8 +6,8 @@ import ora from "ora";
 import minimist from "minimist";
 
 import Liftoff from "liftoff";
-import nodePlop, { NodePlopAPI, AddActionConfig } from "node-plop";
 import inquirer from "inquirer";
+import nodePlop, { NodePlopAPI, AddActionConfig } from "node-plop";
 
 import { getConfig, out, loadUtils } from "./utils";
 
@@ -34,9 +34,13 @@ Generator.launch({}, env => {
 
   // Load generators from config
   Object.keys(config.parts).forEach(partName => {
-    const { description, templates = [], variables = [] } = config.parts[
-      partName
-    ];
+    const {
+      description,
+      folder,
+      moduleName,
+      templates = [],
+      variables = []
+    } = config.parts[partName];
     plop.setGenerator(partName, {
       description,
       prompts: variables.map<inquirer.Question>(
@@ -74,7 +78,7 @@ Generator.launch({}, env => {
       actions: templates.map<AddActionConfig>(
         ({ path, templateFile, abortOnFail }) => ({
           type: "add",
-          path,
+          path: utils.getPartPath(path, folder, moduleName),
           templateFile: utils.getTemplatePath(templateFile),
           force: false,
           data: {},

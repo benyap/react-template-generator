@@ -8,7 +8,7 @@ import { ReactGenConfig } from "./config";
  * @param config the generator configuration
  */
 export const loadUtils = (config: ReactGenConfig) => {
-  const { templatePath } = config;
+  const { templatePath, basePath } = config;
 
   /**
    * Check whether a source path is a directory.
@@ -36,22 +36,34 @@ export const loadUtils = (config: ReactGenConfig) => {
   };
 
   /**
-   * Get a list of directories at the specified source path.
-   * @param source the source path to list
+   * Get a list of directories at the specified directory.
+   * @param source the path of the directory to list
    */
   const listDirectories = (source: string) => ls(source).filter(isDirectory);
 
   /**
-   * Get a list of files at the specified source path.
-   * @param source the source path to list
+   * Get a list of files at the specified directory.
+   * @param source the path of the directory to list
    */
   const listFiles = (source: string) => ls(source).filter(isFile);
 
   /**
    * Create an absolute path to a template file.
-   * @param {string} path
+   * @param source the name of the template file
    */
   const getTemplatePath = (source: string) => path.join(templatePath, source);
+
+  /**
+   * Create an absolute path to a location to generate
+   * a source file for a part.
+   * @param source the name of the source file
+   * @param folder the folder the part should be in
+   * @param moduleName the name of the module if modules are used
+   */
+  const getPartPath = (source: string, folder: string, moduleName?: string) =>
+    moduleName
+      ? path.join(basePath, moduleName, folder, source)
+      : path.join(basePath, folder, source);
 
   return {
     isDirectory,
@@ -59,6 +71,7 @@ export const loadUtils = (config: ReactGenConfig) => {
     ls,
     listDirectories,
     listFiles,
-    getTemplatePath
+    getTemplatePath,
+    getPartPath
   };
 };

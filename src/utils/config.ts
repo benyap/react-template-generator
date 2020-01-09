@@ -60,7 +60,7 @@ export interface PartConfig {
    * path directory. This value is also ignored if
    * `useModules` is `false`.
    */
-  module: string;
+  moduleName: string;
 
   /**
    * The description for the part being generated.
@@ -162,23 +162,19 @@ export const getConfig = (env: Liftoff.LiftoffEnv) => {
     customConfig = JSON.parse(fs.readFileSync(configPath).toString());
   }
 
+  const useModules =
+    typeof customConfig.useModules === "boolean"
+      ? customConfig.useModules
+      : true;
+
   // Create the default config
   const config: ReactGenConfig = {
     root: customConfig.root || cwd,
-    basePath: customConfig.basePath || "src/modules",
+    basePath: customConfig.basePath || useModules ? "src/modules" : "src",
     templatePath: customConfig.templatePath || "templates",
-    useModules:
-      typeof customConfig.useModules === "boolean"
-        ? customConfig.useModules
-        : true,
-    parts: {}
+    useModules,
+    parts: customConfig.parts || {}
   };
-
-  // Get generator parts
-  // TODO: add default parts
-  if (customConfig.parts) {
-    config.parts = customConfig.parts;
-  }
 
   // Return configuration
   return config;
