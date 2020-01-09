@@ -1,6 +1,6 @@
 {
   "name": "react-template-generators",
-  "version": "0.0.1-alpha.29",
+  "version": "0.0.1-alpha.30",
   "description": "Template generators for React projects.",
   "repository": "git@github.com:bwyap/react-template-generators.git",
   "author": "Ben Yap <contact@benyap.com>",
