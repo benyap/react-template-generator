@@ -24,13 +24,6 @@ export interface ReactGenConfig {
   templatePath: string;
 
   /**
-   * Use the `modules` substructure. If this is `false`,
-   * all generated components will go under the `basePath`
-   * directory.
-   */
-  useModules: boolean;
-
-  /**
    * A configuration for the parts that this
    * generator can generate.
    */
@@ -41,26 +34,11 @@ export interface ReactGenConfig {
 
 export interface PartConfig {
   /**
-   * The name of the folder that this part should be
-   * created in.
-   */
-  folder: string;
-
-  /**
    * The name of the part. You can use `handlebars` syntax
    * to substitute for user input values requested through
    * `variables`.
    */
   partName: string;
-
-  /**
-   * The module that this part should be generated in.
-   * If this value is not provided, the part will be
-   * generated in the appropriate folder in the base
-   * path directory. This value is also ignored if
-   * `useModules` is `false`.
-   */
-  moduleName: string;
 
   /**
    * The description for the part being generated.
@@ -96,7 +74,7 @@ export interface VariableConfig {
   /**
    * A default value for this variable.
    */
-  default?: string;
+  defaultValue?: string;
 
   /**
    * A value is required from the user if this is `true`.
@@ -158,23 +136,21 @@ export const getConfig = (env: Liftoff.LiftoffEnv) => {
   let customConfig: Partial<ReactGenConfig> = {};
 
   const { configPath, cwd } = env;
+
+  // Parse config from user provided file if found
   if (configPath) {
     customConfig = JSON.parse(fs.readFileSync(configPath).toString());
   }
 
-  const useModules =
-    typeof customConfig.useModules === "boolean"
-      ? customConfig.useModules
-      : true;
-
-  // Create the default config
+  // Create configuration object
   const config: ReactGenConfig = {
     root: customConfig.root || cwd,
-    basePath: customConfig.basePath || useModules ? "src/modules" : "src",
+    basePath: customConfig.basePath || "src",
     templatePath: customConfig.templatePath || "templates",
-    useModules,
     parts: customConfig.parts || {}
   };
+
+  out.debug("Parsed config successfully.");
 
   // Return configuration
   return config;

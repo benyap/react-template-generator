@@ -34,17 +34,19 @@ Generator.launch({}, env => {
 
   // Load generators from config
   Object.keys(config.parts).forEach(partName => {
-    const {
-      description,
-      folder,
-      moduleName,
-      templates = [],
-      variables = []
-    } = config.parts[partName];
+    const { description, templates = [], variables = [] } = config.parts[
+      partName
+    ];
+
+    // Show warnings for generators with no templates
+    if (templates.length === 0) {
+      out.warning(`The generator "${partName}" produces no templates.`);
+    }
+
     plop.setGenerator(partName, {
       description,
       prompts: variables.map<inquirer.Question>(
-        ({ name, message, default: defaultValue, regex, required, unique }) => {
+        ({ name, message, defaultValue, regex, required, unique }) => {
           return {
             type: "input",
             name,
@@ -60,7 +62,10 @@ Generator.launch({}, env => {
 
               // Check if name is unique
               if (unique) {
-                // TODO:
+                const foundIn = utils.partExists(value);
+                if (foundIn) {
+                  return `A part with the name "${value}" already exists in the `;
+                }
               }
 
               // Check regex if required
@@ -78,8 +83,8 @@ Generator.launch({}, env => {
       actions: templates.map<AddActionConfig>(
         ({ path, templateFile, abortOnFail }) => ({
           type: "add",
-          path: utils.getPartPath(path, folder, moduleName),
-          templateFile: utils.getTemplatePath(templateFile),
+          path: utils.getPartPath(path),
+          templateFile: utils.getTemplatePath(partName, templateFile),
           force: false,
           data: {},
           abortOnFail
@@ -100,7 +105,7 @@ Generator.launch({}, env => {
     // No generators available
     out.error("No generators available.");
     process.exit(1);
-  } else if (!generatorName && generators.length === 1) {
+  } else if (!generatorName) {
     if (generators.length === 1) {
       // Only one generator available, so run that one
       runGenerator(plop, generatorNames[0]);
@@ -125,7 +130,10 @@ Generator.launch({}, env => {
  */
 const runGenerator = (plop: NodePlopAPI, name: string) => {
   const generator = plop.getGenerator(name);
+  out.info(`Running the "${name}" generator.`);
+  out.info(`---`);
 
+  // Runs the generator.
   // See https://github.com/plopjs/plop/blob/master/src/plop.js
   (generator as any)
     .runPrompts()

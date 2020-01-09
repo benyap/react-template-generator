@@ -49,21 +49,31 @@ export const loadUtils = (config: ReactGenConfig) => {
 
   /**
    * Create an absolute path to a template file.
-   * @param source the name of the template file
+   * @param partName the name of part
+   * @param fileName the name of the template file
    */
-  const getTemplatePath = (source: string) => path.join(templatePath, source);
+  const getTemplatePath = (partName: string, fileName: string) =>
+    path.join(templatePath, partName, fileName);
 
   /**
    * Create an absolute path to a location to generate
    * a source file for a part.
-   * @param source the name of the source file
-   * @param folder the folder the part should be in
+   * @param source the path to the part file
+   */
+  const getPartPath = (source: string) => path.join(basePath, source);
+
+  /**
+   * Check if a part with the given name already exists at the
+   * specified location.
+   * @param partName the name of the part to check
+   * @param folder the name of the folder the part is in
    * @param moduleName the name of the module if modules are used
    */
-  const getPartPath = (source: string, folder: string, moduleName?: string) =>
-    moduleName
-      ? path.join(basePath, moduleName, folder, source)
-      : path.join(basePath, folder, source);
+  const partExists = (partName: string) => {
+    // Get a list of items in the folder
+    // TODO:
+    return "";
+  };
 
   return {
     isDirectory,
@@ -72,6 +82,7 @@ export const loadUtils = (config: ReactGenConfig) => {
     listDirectories,
     listFiles,
     getTemplatePath,
-    getPartPath
+    getPartPath,
+    partExists
   };
 };

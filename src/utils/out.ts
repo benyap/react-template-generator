@@ -1,17 +1,23 @@
 import chalk from "chalk";
 
 /**
- * This class provides methods for logging messages to the output.
+ * Provides methods for logging decorated messages
+ * to the output. Each log message is prefixed with
+ * a name and the severity of the log message.
  */
 class Output {
-  private static prefix = chalk.reset("[ReactGen] ");
-
   private static level = {
-    debug: chalk.dim("[DEBUG] "),
-    info: chalk.blue("[INFO]  "),
-    warning: chalk.red("[WARN]  "),
-    error: chalk.red.bgBlackBright("[ERROR] ")
+    debug: chalk.dim("[DEBUG]") + " ",
+    info: chalk.blue("[INFO]") + "  ",
+    warning: chalk.red("[WARN]") + "  ",
+    error: chalk.red.bgBlackBright("[ERROR]") + " "
   };
+
+  private prefix: string;
+
+  constructor(name: string) {
+    this.prefix = chalk.reset(`[${name}]`) + " ";
+  }
 
   public debug(message: any) {
     this.log(Output.level.debug, message);
@@ -36,16 +42,16 @@ class Output {
   ) {
     if (typeof message === "string") {
       // If the message is a string, just log it
-      logMethod(Output.prefix + level + message);
+      logMethod(this.prefix + level + message);
     } else {
       // Otherwise, stringify the message and log each line.
       const lines = JSON.stringify(message, null, 2).split("\n");
       lines.forEach((line, index) => {
-        if (index === 0) logMethod(Output.prefix + level + line);
-        else logMethod(Output.prefix + "        " + line);
+        if (index === 0) logMethod(this.prefix + level + line);
+        else logMethod(this.prefix + "        " + line);
       });
     }
   }
 }
 
-export const out = new Output();
+export const out = new Output("ReactGen");
