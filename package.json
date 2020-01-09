@@ -12,7 +12,7 @@
     "reactgen": "./dist/index.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "rimraf dist && tsc",
     "prepare": "npm run build"
   },
   "dependencies": {
@@ -28,6 +28,7 @@
     "@types/liftoff": "2.5.0",
     "@types/minimist": "1.2.0",
     "@types/v8flags": "3.1.1",
+    "rimraf": "3.0.0",
     "typescript": "3.7.4"
   }
 }

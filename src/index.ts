@@ -9,7 +9,6 @@ import Liftoff from "liftoff";
 import inquirer from "inquirer";
 import nodePlop, { NodePlopAPI, AddActionConfig } from "node-plop";
 
-import { version } from "../package.json";
 import { getConfig } from "./config";
 import { loadUtils } from "./utils";
 import { out } from "./out";
@@ -31,7 +30,7 @@ const Generator = new Liftoff({
  * Launch the application.
  */
 Generator.launch({}, env => {
-  out.info(`React Template Generator v${version}`);
+  out.info(`React Template Generator`);
 
   // Get configuration
   const config = getConfig(env);
