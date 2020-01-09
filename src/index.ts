@@ -10,13 +10,12 @@ import nodePlop, { NodePlopAPI, AddActionConfig } from "node-plop";
 import inquirer from "inquirer";
 
 import { getConfig, out } from "./utils";
-import { stringify } from "querystring";
 
 const Generator = new Liftoff({
   name: "reactgen",
   configName: "reactgenconfig",
   extensions: {
-    ".js": null
+    ".json": null
   },
   v8flags
 });
