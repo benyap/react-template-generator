@@ -7,17 +7,14 @@ import Liftoff from "liftoff";
  */
 export interface ReactGenConfig {
   /**
-   * The path to the project's root folder.
-   */
-  root: string;
-
-  /**
-   * The path to the location where components should be generated.
+   * A relative path (from the project root) to the location where
+   * components should be generated.
    */
   basePath: string;
 
   /**
-   * The path to teh location where template files are located.
+   * A relative path (from the project root) to the location where
+   * template files are located.
    */
   templatePath: string;
 
@@ -98,18 +95,21 @@ export interface VariableConfig {
 
 export interface TemplateConfig {
   /**
-   * The name to give the generated file.
+   * A relative path (from `basePath`) to the location where
+   * this template file should be generated. Handlebars
+   * substitution tokens may be used.
    */
   path: string;
 
   /**
-   * The path to the template file.
+   * A relative path (from `templatePath`) to the location
+   * of the template file.
    */
   templateFile: string;
 
   /**
-   * Continue the of the generation process even if this
-   * template fails to generate successfully. By default,
+   * Continue the generation process even if this template
+   * fails to generate successfully. By default,
    * the process will abort on failure.
    */
   continueOnFail?: boolean;
@@ -124,7 +124,7 @@ export interface TemplateConfig {
 export const getConfig = (env: Liftoff.LiftoffEnv) => {
   let customConfig: Partial<ReactGenConfig> = {};
 
-  const { configPath, cwd } = env;
+  const { configPath } = env;
 
   // Parse config from user provided file if found
   if (configPath) {
@@ -133,7 +133,6 @@ export const getConfig = (env: Liftoff.LiftoffEnv) => {
 
   // Create configuration object
   const config: ReactGenConfig = {
-    root: customConfig.root || cwd,
     basePath: customConfig.basePath || "src",
     templatePath: customConfig.templatePath || "templates",
     parts: customConfig.parts || {}
