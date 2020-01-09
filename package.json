@@ -5,6 +5,9 @@
   "repository": "git@github.com:bwyap/react-typescript-generators.git",
   "author": "Ben Yap <contact@benyap.com>",
   "license": "MIT",
+  "files": [
+    "dist/*"
+  ],
   "bin": {
     "reactgen": "./dist/index.js"
   },
