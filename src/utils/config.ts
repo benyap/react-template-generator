@@ -19,6 +19,11 @@ export interface ReactGenConfig {
   basePath: string;
 
   /**
+   * The path to teh location where template files are located.
+   */
+  templatePath: string;
+
+  /**
    * Use the `modules` substructure. If this is `false`,
    * all generated components will go under the `basePath`
    * directory.
@@ -161,6 +166,7 @@ export const getConfig = (env: Liftoff.LiftoffEnv) => {
   const config: ReactGenConfig = {
     root: customConfig.root || cwd,
     basePath: customConfig.basePath || "src/modules",
+    templatePath: customConfig.templatePath || "templates",
     useModules:
       typeof customConfig.useModules === "boolean"
         ? customConfig.useModules

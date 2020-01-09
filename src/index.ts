@@ -9,7 +9,7 @@ import Liftoff from "liftoff";
 import nodePlop, { NodePlopAPI, AddActionConfig } from "node-plop";
 import inquirer from "inquirer";
 
-import { getConfig, out } from "./utils";
+import { getConfig, out, loadUtils } from "./utils";
 
 const Generator = new Liftoff({
   name: "reactgen",
@@ -25,6 +25,9 @@ Generator.launch({}, env => {
 
   // Get configuration
   const config = getConfig(env);
+
+  // Load utils
+  const utils = loadUtils(config);
 
   // Create Plop
   const plop = nodePlop("");
@@ -52,7 +55,9 @@ Generator.launch({}, env => {
               }
 
               // Check if name is unique
-              // TODO:
+              if (unique) {
+                // TODO:
+              }
 
               // Check regex if required
               if (regex) {
@@ -70,7 +75,7 @@ Generator.launch({}, env => {
         ({ path, templateFile, abortOnFail }) => ({
           type: "add",
           path,
-          templateFile,
+          templateFile: utils.getTemplatePath(templateFile),
           force: false,
           data: {},
           abortOnFail
