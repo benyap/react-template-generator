@@ -4,12 +4,12 @@ import chalk from "chalk";
  * This class provides methods for logging messages to the output.
  */
 class Output {
-  private static prefix = chalk.reset("[ReactTSGen] ");
+  private static prefix = chalk.reset("[ReactGen] ");
 
   private static level = {
     debug: chalk.dim("[DEBUG] "),
-    info: chalk.blue("[INFO] "),
-    warning: chalk.red("[WARN] "),
+    info: chalk.blue("[INFO]  "),
+    warning: chalk.red("[WARN]  "),
     error: chalk.red.bgBlackBright("[ERROR] ")
   };
 
@@ -42,11 +42,7 @@ class Output {
       const lines = JSON.stringify(message, null, 2).split("\n");
       lines.forEach((line, index) => {
         if (index === 0) logMethod(Output.prefix + level + line);
-        else {
-          let spacer = "      ";
-          if (/\[[A-Z]{5}\]/g.test(level)) spacer = "       ";
-          logMethod(Output.prefix + spacer + line);
-        }
+        else logMethod(Output.prefix + "        " + line);
       });
     }
   }

@@ -26,8 +26,8 @@ export interface ReactGenConfig {
   useModules: boolean;
 
   /**
-   * A configuration for the components that this
-   * generator supports.
+   * A configuration for the parts that this
+   * generator can generate.
    */
   parts: {
     [key: string]: PartConfig;
@@ -36,22 +36,109 @@ export interface ReactGenConfig {
 
 export interface PartConfig {
   /**
-   * The module that this component should be generated
-   * in by default. This value is ignored if `useModules`
-   * is `false`.
-   */
-  module: string;
-
-  /**
    * The name of the folder that this part should be
    * created in.
    */
   folder: string;
 
   /**
-   *
+   * The name of the part. You can use `handlebars` syntax
+   * to substitute for user input values requested through
+   * `variables`.
+   */
+  partName: string;
+
+  /**
+   * The module that this part should be generated in.
+   * If this value is not provided, the part will be
+   * generated in the appropriate folder in the base
+   * path directory. This value is also ignored if
+   * `useModules` is `false`.
+   */
+  module: string;
+
+  /**
+   * The description for the part being generated.
+   */
+  description: string;
+
+  /**
+   * Configure the values to get from the user in
+   * order to generate the part.
+   */
+  variables?: VariableConfig[];
+
+  /**
+   * Configure the template files to generate
+   * for this part.
+   */
+  templates?: TemplateConfig[];
+}
+
+export interface VariableConfig {
+  /**
+   * A unique name for the variable being requested.
+   * This value can be used as a substitution token
+   * when generating components.
    */
   name: string;
+
+  /**
+   * The message used to prompt the user for input.
+   */
+  message: string;
+
+  /**
+   * A default value for this variable.
+   */
+  default?: string;
+
+  /**
+   * A value is required from the user if this is `true`.
+   *
+   * @default true
+   */
+  required?: boolean;
+
+  /**
+   * If this is `true`, the value will be checked
+   * that it is unique in the location that it is
+   * being created in.
+   */
+  unique?: true;
+
+  /**
+   * If a regular expression is provided, it will be
+   */
+  regex?: {
+    /**
+     * The regular expression to use to check.
+     */
+    regex: string;
+
+    /**
+     * The error message if the regular expression fails.
+     */
+    message: string;
+  };
+}
+
+export interface TemplateConfig {
+  /**
+   * The name to give the generated file.
+   */
+  path: string;
+
+  /**
+   * The path to the template file.
+   */
+  templateFile: string;
+
+  /**
+   * Abort the rest of the generation process if this
+   * template fails to generate successfully.
+   */
+  abortOnFail: boolean;
 }
 
 /**
@@ -61,7 +148,7 @@ export interface PartConfig {
  * @param env
  */
 export const getConfig = (env: Liftoff.LiftoffEnv) => {
-  out.debug("Getting config");
+  out.debug("Getting config...");
 
   let customConfig: Partial<ReactGenConfig> = {};
 
@@ -82,8 +169,11 @@ export const getConfig = (env: Liftoff.LiftoffEnv) => {
   };
 
   // Get generator parts
+  // TODO: add default parts
+  if (customConfig.parts) {
+    config.parts = customConfig.parts;
+  }
 
   // Return configuration
-  out.info(config);
   return config;
 };
