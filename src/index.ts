@@ -84,7 +84,7 @@ Generator.launch({}, env => {
         ({ path, templateFile, abortOnFail }) => ({
           type: "add",
           path: utils.getPartPath(path),
-          templateFile: utils.getTemplatePath(partName, templateFile),
+          templateFile: utils.getTemplatePath(templateFile),
           force: false,
           data: {},
           abortOnFail

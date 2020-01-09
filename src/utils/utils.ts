@@ -49,11 +49,10 @@ export const loadUtils = (config: ReactGenConfig) => {
 
   /**
    * Create an absolute path to a template file.
-   * @param partName the name of part
-   * @param fileName the name of the template file
+   * @param templateFile path to the template file
    */
-  const getTemplatePath = (partName: string, fileName: string) =>
-    path.join(templatePath, partName, fileName);
+  const getTemplatePath = (templateFile: string) =>
+    path.join(templatePath, templateFile);
 
   /**
    * Create an absolute path to a location to generate
