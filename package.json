@@ -1,5 +1,5 @@
 {
-  "name": "react-template-generator",
+  "name": "@benyap/react-template-generator",
   "version": "0.0.1-alpha.32",
   "description": "Template generator for React projects.",
   "repository": "git@github.com:bwyap/react-template-generator.git",
