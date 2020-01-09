@@ -1,6 +1,6 @@
 {
   "name": "react-typescript-generators",
-  "version": "0.0.1-alpha.19",
+  "version": "0.0.1-alpha.20",
   "description": "Template generators for React Typescript projects.",
   "repository": "git@github.com:bwyap/react-typescript-generators.git",
   "author": "Ben Yap <contact@benyap.com>",
