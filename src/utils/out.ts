@@ -43,7 +43,8 @@ class Output {
       lines.forEach((line, index) => {
         if (index === 0) logMethod(Output.prefix + level + line);
         else {
-          const spacer = level.replace(/\[[A-Z]+\]/g, "-");
+          let spacer = "      ";
+          if (/\[[A-Z]{5}\]/g.test(level)) spacer = "       ";
           logMethod(Output.prefix + spacer + line);
         }
       });
