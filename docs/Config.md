@@ -8,13 +8,13 @@ To configure `react-template-generator`, create a file called `reactgenconfig.js
 
 _Defaults are used if these values are not present in the configuration file._
 
-**basePath**
+**basePath** `string`
 
 A relative path (from the project root) to the location where components should be generated.
 
 _Default: `src`_
 
-**templatePath**
+**templatePath** `string`
 
 A relative path (from the project root) to the location where template files are located.
 
@@ -26,61 +26,62 @@ _Default: `templates`_
 
 To create a generator, create an object with the following properties inside the `parts` key in the top-level object, with the key as the name of the generator.
 
-**description**
+**description** `string`
 
 A description for the part being generated.
 
-**variables[]**
+**variables[]** `object[]`
 
 Configure the values to get from the user in order to generate the part.
 This should be an array of objects with the following keys:
 
-**variables.\$.name**
+**variables.\$.name** `string`
 
 A unique name for the variable being requested. This value can be used as a substitution token when generating components using [Handlebars](https://handlebarsjs.com/guide/) syntax.
 
-**variables.\$.message**
+**variables.\$.message** `string`
 
 The message used to prompt the user for input.
 
-**variables.\$.defaultValue**
+**variables.\$.defaultValue** `string`
 
 A default value for this variable.
 
-**variables.\$.optional**
+**variables.\$.optional** `boolean`
 
 Make this variable optional. By default, all variables are required.
 
-**variables.\$.test**
+**variables.\$.test** `object`
 
 If a regular expression is provided, it will be used to check the value of the variable. The value should be an object with the following keys:
 
-**variables.\$.test.regex**
+**variables.\$.test.regex** `string`
 
 The regular expression to use to check.
 
-**variables.\$.test.error**
+**variables.\$.test.error** `string`
 
 The error message if the regular expression fails.
 
-**variables.\$.test.inverted**
+**variables.\$.test.inverted** `boolean`
 
 Invert the regex result. By default, an error is thrown if the regex contains a match.
 
-**templates[]**
+**templates[]** `object[]`
 
 Configure the template files to generate for this part.
 This should be an array of objects with the following keys:
 
-**templates.\$.path**
+**templates.\$.path** `string`
 
 A relative path (from `basePath`) to the location where this template file should be generated. [Handlebars](https://handlebarsjs.com/guide/) substitution tokens may be used.
 
-**templates.\$.templateFile**
+**templates.\$.templateFile** `string`
 
 A relative path (from `templatePath`) to the location of the template file.
 
-**templates.\$.continueOnFail**
+**templates.\$.continueOnFail** `boolean`
+
 Continue the generation process even if this template fails to generate successfully. By default, the process will abort on failure.
 
 ---
