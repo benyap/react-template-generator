@@ -1,3 +1,12 @@
+<h1 align="center">
+  <b>THIS PROJECT IS ARCHIVED</b>
+</h1>
+<p align="center">
+  Please check out <a href="http://www.hygen.io">Hygen</a> for a good alternative!
+</p>
+
+---
+
 # React Template Generator
 
 **Don't work harder, work smarter.**
